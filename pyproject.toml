@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "info_player_start"
+version = "0.1.0"
+description = "Player 1 start."
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-dotenv = "^0.20.0"
+mautrix = "^0.16.6"
+pipedream = "^0.3.0"
+
+[tool.poetry.dev-dependencies]
+amalgamate = {git = "https://github.com/Blaperture-Mesa/amalgamate.git", rev = "bm_internal"}
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
