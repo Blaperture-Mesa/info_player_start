@@ -10,7 +10,6 @@ if not USE_JSON:
 
 
 BM_DEBUG = int( environ.get("BM_DEBUG", 0) )
-BM_IPS_HCAPTCHA_TOKEN = environ.get( "BM_IPS_HCAPTCHA_TOKEN" )
 BM_IPS_HOMESERVER = environ.get( "BM_IPS_HOMESERVER" )
 BM_IPS_USERNAME = environ.get( "BM_IPS_USERNAME" )
 BM_IPS_TOKEN = environ.get( "BM_IPS_TOKEN" )
