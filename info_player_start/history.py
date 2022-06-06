@@ -1,4 +1,3 @@
-import os
 import pathlib
 import asyncio
 from mautrix.client import Client
