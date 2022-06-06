@@ -16,7 +16,6 @@ from . import config, app
 
 
 
-BM_IPS_ROOM_STATS_ID = os.environ.get( "BM_IPS_ROOM_STATS_ID" )
 HISTORY_PATH = pathlib.Path( "bm.ips.history" )
 if config.USE_JSON:
     HISTORY_PATH = pathlib.Path( "/tmp/bm/ips/history.json" )
