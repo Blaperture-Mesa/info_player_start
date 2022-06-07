@@ -135,7 +135,7 @@ async def __init ():
             _LOGGED_IN = bool( response.access_token )
         if not _LOGGED_IN:
             raise RuntimeError( "Failed to login" )
-        config.write_creds( CLIENT, CLIENT_DATASTORE )
+        config.write_creds( CLIENT_DATASTORE, CLIENT )
     LOGGER.info( "init:Logged in: %s", (await CLIENT.whoami()).json() )
     await __run_events( CustomEventType.POST_INIT )
     return CLIENT

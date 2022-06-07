@@ -16,7 +16,7 @@ BM_IPS_PASSWORD = environ.get( "BM_IPS_PASSWORD" )
 CREDS_PATH = Path( "bm/ips/credentials" )
 
 
-def write_creds (client: Client, datastore: BaseDatastore):
+def write_creds (datastore: BaseDatastore, client: Client):
     datastore.write( CREDS_PATH, {
         "user_id": client.mxid
         , "device_id": client.device_id
