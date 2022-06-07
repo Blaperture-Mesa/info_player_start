@@ -15,6 +15,7 @@ from mautrix.types import (
     LoginType
 )
 from . import config
+from .datastore import BaseDatastore
 __all__ = [
     "LOGGER"
     , "CLIENT"
@@ -46,6 +47,7 @@ _LOGGED_IN = False
 
 LOGGER = logging.getLogger()
 CLIENT: Client = None
+CLIENT_DATASTORE: BaseDatastore = None
 
 
 async def __run_events (key: CustomEventType, *args, **kwargs):
@@ -71,7 +73,7 @@ async def __run_events (key: CustomEventType, *args, **kwargs):
     return tuple()
 
 
-def on (evt_type: CustomEventType, wait_sync: bool=True) -> _EVENT_FUNC:
+def on (evt_type: CustomEventType, wait_sync: bool=False) -> _EVENT_FUNC:
     def decorator (func: _EVENT_FUNC):
         events = _CLIENT_CUSTOM_EVENTS[str(evt_type.value)]
         def wrapper (*args, **kwargs):
@@ -94,8 +96,14 @@ async def __init ():
     CLIENT = Client( base_url=config.BM_IPS_HOMESERVER )
     await __run_events( CustomEventType.PRE_INIT )
 
+    if not CLIENT_DATASTORE:
+        raise RuntimeError(
+            f"Datastore is not configured"
+            , type(CLIENT_DATASTORE).__name__
+        )
+
     _LOGGED_IN = False
-    creds = config.read_creds()
+    creds = config.read_creds( CLIENT_DATASTORE )
     if creds:
         try:
             _LOGGED_IN = await __login_by_token( **creds )
@@ -127,7 +135,7 @@ async def __init ():
             _LOGGED_IN = bool( response.access_token )
         if not _LOGGED_IN:
             raise RuntimeError( "Failed to login" )
-        config.write_creds( CLIENT )
+        config.write_creds( CLIENT, CLIENT_DATASTORE )
     LOGGER.info( "init:Logged in: %s", (await CLIENT.whoami()).json() )
     await __run_events( CustomEventType.POST_INIT )
     return CLIENT
@@ -153,3 +161,9 @@ async def run ():
         await CLIENT.api.session.close()
         LOGGER.info( "Stopped..." )
         await __run_events( CustomEventType.POST_SHUTDOWN )
+
+
+def set_datastore (datastore: BaseDatastore):
+    global CLIENT_DATASTORE
+    CLIENT_DATASTORE = datastore
+    return CLIENT_DATASTORE
